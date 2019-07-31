@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+{% endblock %}
+
+{% block head_title %}No results - Google Scraper{% endblock %}
+
+{% block body %}
+  <div class="container-fluid">
+    <a href="{% url 'settings' %}" id="settings-link" class="float-right mr-4 mt-3">
+      <i class="fas fa-cog text-dark h4"></i>
+    </a>
+
+    <div class="container">
+
+      <div class="row mt-3">
+        <div class="col">
+          <a href="{% url 'home' %}" id="result-page-title">
+            <div class="h3">Google Scraper</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Search bar -->
+      <div class="row mt-2">
+        <div class="col-xl-7 col-lg-8 col-md-10">
+          <form action="{% url 'search_result' %}" method="get">
+            <div class="input-group">
+              <input type="text" name="query" value="{{ request.GET.query }}" class="form-control border-secondary"
+                     aria-label="Search phrase">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-2 mb-3">
+        <div class="col">
+          <div class=" small text-secondary">0 results</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+a {
+  color: #000;
+}
+
+a:hover {
+  color: #000;
+  text-decoration: none;
+}
+
+.item-link:hover {
+  text-decoration: underline #4500ae;
+}
+
+.item-title {
+  color: #4500ae;
+}
+
+.item-title:visited {
+  color: #77009b;
+}
+
+.item-formatted-url {
+  color: #007021;
+}
+
+.item-snippet {
+  color: #555555;
+}

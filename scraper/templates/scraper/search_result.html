@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+{% endblock %}
+
+{% block head_title %}{{ request.GET.query }} - Google Scraper{% endblock %}
+
+{% block body %}
+  <div class="container-fluid">
+    <a href="{% url 'settings' %}" id="settings-link" class="float-right mr-4 mt-3">
+      <i class="fas fa-cog text-dark h4"></i>
+    </a>
+
+    <div class="container">
+
+      <div class="row mt-3">
+        <div class="col">
+          <a href="{% url 'home' %}" id="result-page-title">
+            <div class="h3 mt-2">Google Scraper</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Search bar -->
+      <div class="row mt-2">
+        <div class="col-xl-7 col-lg-8 col-md-10">
+          <form action="{% url 'search_result' %}" method="get">
+            <div class="input-group">
+              <input type="text" name="query" value="{{ request.GET.query.strip }}" class="form-control border-primary"
+                     aria-label="Search phrase">
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row mt-2 mb-3">
+        <div class="col">
+          <div class=" small text-secondary">About {{ total_results|intcomma }} results</div>
+        </div>
+      </div>
+
+
+      <!-- Items -->
+      {% if links_only %}
+
+        {% for item in items %}
+          <div class="row mb-4">
+            <div class="col-xl-7 col-lg-8 col-md-10">
+              <a class="item-link" href="{{ item.link }}">
+                <div class="item-formatted-url h6 mb-1">
+                  {% widthratio page_no 1 10 as start_index %}
+                  {{ start_index|add:'-10'|add:forloop.counter }}. {{ item.link }}
+                </div>
+              </a>
+            </div>
+          </div>
+
+        {% endfor %}
+      {% else %}
+
+        {% for item in items %}
+          <div class="row mb-4">
+            <div class="col-xl-7 col-lg-8 col-md-10">
+              <a class="item-link" href="{{ item.link }}">
+                <div class="item-title h5 mb-1">
+                  {% widthratio page_no 1 10 as start_index %}
+                  {{ start_index|add:'-10'|add:forloop.counter }}. {{ item.title }}
+                </div>
+                <div class="item-formatted-url h6 mb-1">{{ item.formatted_url }}</div>
+              </a>
+              <div class="item-snippet small">{{ item.html_snippet }}</div>
+            </div>
+          </div>
+        {% endfor %}
+
+        <!-- Most common words -->
+        <div class="row mt-5 mb-4">
+          <div class="col">
+            <div class="h5 mb-1">Most common words:</div>
+            {% for word in most_common_words %}
+              {{ word }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+      {% endif %}
+
+      <!-- Pagination -->
+      <div class="row my-4">
+        <div class="col">
+          <nav aria-label="pagination">
+            <ul class="pagination">
+              {% if previous_page %}
+                <li class="page-item">
+                  <a class="page-link" href="{{ request.path }}?query={{ request.GET.query }}&page={{ previous_page }}"><<</a>
+                </li>
+              {% endif %}
+
+              {% for i in i|rjust:10 %}
+                {% if page_no == forloop.counter %}
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">{{ forloop.counter }}</a>
+                  </li>
+                {% else %}
+                  <li class="page-item">
+                    <a class="page-link"
+                       href="{{ request.path }}?query={{ request.GET.query }}&page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+
+              {% if next_page %}
+                <li class="page-item">
+                  <a class="page-link" href="{{ request.path }}?query={{ request.GET.query }}&page={{ next_page }}">>></a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

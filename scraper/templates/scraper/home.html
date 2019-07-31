@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block body %}
+  <div class="container-fluid">
+    <a href="{% url 'settings' %}" id="settings-link" class="float-right mr-4 mt-3">
+      <i class="fas fa-cog text-dark h4"></i>
+    </a>
+
+    <div class="container">
+
+      <div class="row mt-3">
+        <div class="col pb-5 mt-5">
+          <div class="display-4 text-center mt-5">Google Scraper</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-7 col-lg-8 col-md-10 mx-auto">
+
+          <form action="{% url 'search_result' %}" method="get">
+            <div class="input-group">
+              <input type="text" name="query" class="form-control border-primary" aria-label="Search phrase">
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
